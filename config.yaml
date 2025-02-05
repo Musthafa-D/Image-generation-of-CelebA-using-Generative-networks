@@ -1,0 +1,60 @@
+optimized: 
+  learning_rate_exp: 
+    - float
+    - -4
+    - -2
+  learning_rate_exp_l: 
+    - float
+    - -4
+    - -1
+  noise_dim:
+    - int
+    - 95
+    - 115
+
+data:
+  path: Datasets
+  dataset: celeba
+  task: generate # generate for GAN and conditional_generate for CGAN
+  scaler: "01"
+  shuffle_train: True
+  batch_size: 128
+  label_indices: [2, 8, 18, 19, 20, 24, 31, 34, 36, 39]  # Chosen indices for label transform
+  # Attractive, Black_hair, Heavy_Makeup, High_Cheekbones, Male, No_Beard, Smiling, Wearing_Earrings, 
+  # Wearing_Lipstick, Young
+    
+study:  
+  number_of_trials: 30
+  direction: minimize
+  optimization_target: FidScore
+  study_name: GAN # GAN for normal GAN and Conditional_GAN for CGAN
+
+network:
+  hidden_channels: 64
+  final_layer: "nlrl"
+  
+learning:
+  num_epochs: 15
+  testevery: 1
+  criterion: BCELoss
+  model: 'GAN' # CGAN or GAN only
+  threshold: 0.5
+  layer: 'nlrl'
+
+classifier_nlrl: # make no changes
+  filter_growth_rate: 2
+  dropout_rate: 0.2
+  final_channel: 12
+  activation_function: RReLU
+  initial_out_channels: 32
+  final_layer: "nlrl"
+  num_blocks: 3
+
+classifier_linear: # make no changes
+  filter_growth_rate: 2
+  dropout_rate: 0.2
+  final_channel: 12
+  activation_function: RReLU
+  initial_out_channels: 32
+  final_layer: "linear"
+  num_blocks: 3

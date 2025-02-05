@@ -1,0 +1,44 @@
+data:
+  dataset: celeba
+  task: conditional_generate # generate for GAN and conditional_generate for CGAN
+  scaler: "01"
+  shuffle_train: True
+  batch_size: 128
+  label_indices: [2, 8, 18, 19, 20, 24, 31, 34, 36, 39]  # Chosen indices for label transform
+  # Attractive, Black_hair, Heavy_Makeup, High_Cheekbones, Male, No_Beard, Smiling, Wearing_Earrings, 
+  # Wearing_Lipstick, Young
+
+network:
+  hidden_channels: 64
+  final_layer: "linear"
+  
+learning:
+  num_epochs: 35
+  testevery: 1
+  criterion: BCELoss
+  model: 'CGAN' # CGAN or GAN only
+  threshold: 0.5
+  layer: 'linear'
+  learning_rate_exp: -3.5222848781994855
+  learning_rate_exp_l: -1.0209408491028553
+  noise_dim: 106
+  cnn_feed_back: "Yes"
+  classification_criterion: BCEWithLogitsLoss
+
+classifier_nlrl: # make no changes
+  filter_growth_rate: 2
+  dropout_rate: 0.2
+  final_channel: 12
+  activation_function: RReLU
+  initial_out_channels: 32
+  final_layer: "nlrl"
+  num_blocks: 3
+
+classifier_linear: # make no changes
+  filter_growth_rate: 2
+  dropout_rate: 0.2
+  final_channel: 12
+  activation_function: RReLU
+  initial_out_channels: 32
+  final_layer: "linear"
+  num_blocks: 3
