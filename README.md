@@ -5,6 +5,8 @@
 This project implements **image generation** on the CelebA face attribute dataset using generative neural networks in PyTorch.  
 CelebA contains over 200,000 celebrity face images labeled with multiple attributes. In this work, only the image content is used to train a generative model that learns to produce realistic face images from random noise.
 
+This repository provides scripts for training generative models, visualizing the generated images and interpretability methods of the generative models.
+
 Generative models are widely used for tasks such as:
 - Artistic content generation
 - Data augmentation
@@ -29,5 +31,7 @@ The dataset must be downloaded separately due to size constraints.
 - Generative model architecture (GAN / similar)
 - Training loop with adversarial optimization
 - Image generation and visualization
+- Interpretability of the trained generative models.
 
 ---
+
