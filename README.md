@@ -1,37 +1,54 @@
-# CelebA Image Generation Using Generative Networks (PyTorch)
+# CelebA Image Generation with GANs
 
-## Project Overview
+Adversarial image-generation experiments in PyTorch, combining generator/discriminator training with classifier-based evaluation and interpretation. The project explores the images produced by a generative model and the behaviour of the networks used to assess them.
 
-This project implements **image generation** on the CelebA face attribute dataset using generative neural networks in PyTorch.  
-CelebA contains over 200,000 celebrity face images labeled with multiple attributes. In this work, only the image content is used to train a generative model that learns to produce realistic face images from random noise.
+The study configuration selects an unconditional GAN on CelebA. The code also contains a conditional variant using facial attributes, so results should identify the model and conditioning settings used.
 
-This repository provides scripts for training generative models, visualizing the generated images and interpretability methods of the generative models.
+## Approach
 
-Generative models are widely used for tasks such as:
-- Artistic content generation
-- Data augmentation
-- Understanding latent representations
+- Map random latent vectors to synthetic images through a generator.
+- Train a discriminator to distinguish generated and dataset images.
+- Explore linear and NLRL discriminator output heads.
+- Configure learning rates, latent dimensions and network parameters.
+- Inspect training curves, generated samples and attribution/representation plots.
 
----
+## Code organisation
 
-## Dataset
+| File | Role |
+|---|---|
+| `networks.py` | GAN/conditional GAN and auxiliary network definitions |
+| `data_loader.py` | Framework-based dataset preparation |
+| `learner.py` | Adversarial training and evaluation |
+| `optuna_hyp.py` | Optuna experiments |
+| `main.py` | Study launcher |
+| `dummy_main.py` | Fixed-run launcher |
+| `metrics.py` and `plots.py` | Analysis and visualisation |
+| `StudySummary.ipynb` | Saved study inspection |
 
-- **CelebA (Celeb Faces Attributes)**
-- ~200,000 images (cropped faces)
-- High diversity in appearance, pose, background
-- Used here for **conditional and uncoditional image generation**
+## Environment and use
 
-The dataset must be downloaded separately due to size constraints.
+The code uses PyTorch and the external `ccbdl` framework for configuration, data loading, experiment storage and parts of the learning workflow. A compatible installation of that framework is required; it is not bundled here. Other dependencies include torchvision, NumPy, Matplotlib, Optuna and Captum, with additional analysis libraries used by individual modules.
 
----
+Use the original compatible environment, prepare the dataset at the configured location, and run from the repository root so relative paths resolve correctly. The archive does not include a complete dependency lock file. Supply datasets and optional pretrained models separately where referenced.
 
-## What This Project Includes
+The fixed-run launcher reads `dummy_config.yaml`. Inspect its model type, image representation, discriminator head and learning-rate settings. The learner also loads classifiers for auxiliary metrics; supply the checkpoints expected by the selected path.
 
-- PyTorch-based data loading and preprocessing
-- Generative model architecture (GAN / similar)
-- Training loop with adversarial optimization
-- Image generation and visualization
-- Interpretability of the trained generative models.
+After preparation, the fixed-run entry point is:
 
----
+```bash
+python dummy_main.py
+```
 
+For studies, `main.py` reads `config.yaml`. Interpret outputs using the configuration that produced them, rather than the study name alone.
+
+## Evaluation
+
+Generator and discriminator losses describe training, but a lower generator loss does not necessarily mean better or more diverse images. Generated grids and class coverage provide complementary evidence.
+
+Classifier-based Fréchet calculations use custom features. Label them accordingly rather than comparing them directly with standard Inception-feature FID scores. Where PSNR/SSIM are used, make the meaning of the real/generated pairing explicit.
+
+No headline quality score is asserted here. Assess outputs, checkpoints and experiment records together before reporting a numerical comparison.
+
+## Project focus
+
+The repository combines adversarial learning, configurable output heads and model interpretation. It retains the original `dummy_*` naming for fixed runs and relies on external framework components rather than implementing every dependency independently.
